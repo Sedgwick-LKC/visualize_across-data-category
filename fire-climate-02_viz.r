@@ -70,8 +70,9 @@ dplyr::glimpse(prec_lfm.duration)
 graph_prec <- ggplot(prec_lfm.duration, aes(x = Date, y = precip_mm)) +
   geom_bar(stat = 'identity', color = "#0077b6") +
   labs(y = "Precipitation (mm)", x = "Date") +
-  theme_classic() +
-  theme(axis.title.y = element_text(size = 16),
+  scale_x_date(date_breaks = "3 months") +
+  theme_classic(base_size = 16) +
+  theme(axis.title.y = element_text(),
     axis.text.x = element_text(angle = 45, hjust = 1),
     axis.title.x = element_blank()); graph_prec
 
@@ -80,6 +81,6 @@ cowplot::plot_grid(graph_lfm, graph_prec, ncol = 1, align = "hv")
 
 # Export
 ggsave(filename = file.path("graphs", "fire-climate_lfm-and-precip.png"),
-width = 10, height = 6, units = "in")
+width = 10, height = 8, units = "in")
 
 # End ----
