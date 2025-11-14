@@ -18,7 +18,7 @@ rm(list = ls()); gc()
 source(file = file.path("tools", "ggplot2-themes.r"))
 
 ## ----------------------------- ##
-# Load Data ----
+# Load & Prepare Data ----
 ## ----------------------------- ##
 
 # Load the LFM + precipitation data
@@ -31,6 +31,14 @@ combo_lfm.prec <- read.csv(file = file.path("data", "multi-category", "fire-clim
 
 # Check structure
 dplyr::glimpse(combo_lfm.prec)
+
+# Split off the precip data (currently rain is duplicated across species & sites)
+prec_lfm.duration <- combo_lfm.prec |> 
+  dplyr::select(Date, precip_mm) |> 
+  dplyr::distinct()
+
+# Check structure
+dplyr::glimpse(prec_lfm.duration)
 
 ## ----------------------------- ##
 # LFM & Precip ----
@@ -57,14 +65,6 @@ graph_lfm <- ggplot(combo_lfm.prec, aes(x = Date, y = Moisture, color = Species)
   theme(legend.position = "top",
     axis.text.x = element_blank(),
     axis.title.x = element_blank()); graph_lfm
-
-# Split off the precip data (currently rain is duplicated across species & sites)
-prec_lfm.duration <- combo_lfm.prec |> 
-  dplyr::select(Date, precip_mm) |> 
-  dplyr::distinct()
-
-# Check structure
-dplyr::glimpse(prec_lfm.duration)
 
 # Make the precip graph
 graph_prec <- ggplot(prec_lfm.duration, aes(x = Date, y = precip_mm)) +
