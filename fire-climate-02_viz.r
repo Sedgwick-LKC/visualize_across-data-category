@@ -21,24 +21,19 @@ source(file = file.path("tools", "ggplot2-themes.r"))
 # Load & Prepare Data ----
 ## ----------------------------- ##
 
-# Load the LFM + precipitation data
-combo_lfm.prec <- read.csv(file = file.path("data", "multi-category", "fire-climate_lfm-and-precip.csv")) |> 
-  # Make date a real date
-  dplyr::mutate(Date = as.Date(Date)) |> 
-  # Keep only rows with all needed data
-  dplyr::filter(dplyr::if_all(.cols = dplyr::everything(),
-    .fns = ~ !is.na(.)))
+# Load the LFM data
+df_lfm <- read.csv(file = file.path("data", "fire", "viz-ready_lfm.csv")) %>% 
+  dplyr::mutate(Date = as.Date(Date))
 
 # Check structure
-dplyr::glimpse(combo_lfm.prec)
+dplyr::glimpse(df_lfm)
 
-# Split off the precip data (currently rain is duplicated across species & sites)
-prec_lfm.duration <- combo_lfm.prec |> 
-  dplyr::select(Date, precip_mm) |> 
-  dplyr::distinct()
+# Load the precipitation data too
+df_prec <- read.csv(file = file.path("data", "climate", "viz-ready_precip.csv")) %>% 
+  dplyr::mutate(date = as.Date(date))
 
 # Check structure
-dplyr::glimpse(prec_lfm.duration)
+dplyr::glimpse(df_prec)
 
 ## ----------------------------- ##
 # LFM & Precip ----
@@ -51,7 +46,7 @@ spp_colors <- c("Purple Sage" = "#762a83",
                 "Coast Live Oak" = "#1b7837")
 
 # Make the LFM graph
-graph_lfm <- ggplot2::ggplot(combo_lfm.prec, aes(x = Date, y = Moisture, color = Species)) +
+graph_lfm <- ggplot2::ggplot(df_lfm, aes(x = Date, y = Moisture, color = Species)) +
   ggplot2::geom_line() + 
   ggplot2::geom_point() +
   # Add horizontal lines for key threshold LFM values
@@ -67,7 +62,7 @@ graph_lfm <- ggplot2::ggplot(combo_lfm.prec, aes(x = Date, y = Moisture, color =
     axis.title.x = element_blank()); graph_lfm
 
 # Make the precip graph
-graph_prec <- ggplot2::ggplot(prec_lfm.duration, aes(x = Date, y = precip_mm)) +
+graph_prec <- ggplot2::ggplot(df_prec, aes(x = date, y = precip_mm)) +
   ggplot2::geom_bar(stat = 'identity', color = "#0077b6") +
   ggplot2::labs(y = "Precipitation (mm)", x = "Date") +
   ggplot2::scale_x_date(date_breaks = "3 months") +
