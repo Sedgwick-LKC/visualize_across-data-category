@@ -68,6 +68,7 @@ sra80_file_paths <- list.files(path = "data/fire/soil_temps", pattern = "\\.csv$
                             save.plots.tables=T,
                             save.directory="graphs/shefire")
   
-  
+  ###note that shefire resets the working directory to the output directory
+
   #End ----
 
