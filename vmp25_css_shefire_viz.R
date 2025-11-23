@@ -1,15 +1,19 @@
-#Read in and plot soil temperature data using SheFire 
+#Visualize and fit a regression model to soil temperature profile data collected 
+#in prescribed burns (3 ibuttons mounted in a wooden stake) using 
+# the SheFire measurement system and analysis package https://doi.org/10.1002/eap.2627
+#
 library(librarian)
 librarian::shelf(tidyverse, googledrive)
 library(SheFire)
-library(ggplot2)
+#library(ggplot2)
 library(SheFire)
 library(tidyverse)
 library(lubridate)
 ##-----------------##
-#Get soil temperature data from shared google drive
+#Get soil temperature data from shared google drive, grabbing one location at a time.
+#Could be looped across all files but prefer to examine one location at a time
 ##-----------------##
-#SRA80 soil temp files
+#get SRA80 soil temp files
 sra80_soil_temp_files <- googledrive::drive_ls(googledrive::as_id("https://drive.google.com/drive/u/2/folders/10OvZnpF-VQDEZJt6i3nGhCu7sscfEN-f?role=writer"), pattern = "csv") |> 
   dplyr::filter(stringr::str_detect(string = name, pattern = "sra80_css"))
 #
@@ -51,6 +55,7 @@ sra80_file_paths <- list.files(path = "data/fire/soil_temps", pattern = "\\.csv$
     names(shedat) <- c("Date.Time","TimeCounter","Temp_S","Temp_M","Temp_D")
   #write data file with appropriate sample name
     write.csv(shedat,"data/fire/soil_temps/shefire/input_data/shedat_css_sra80_p2.csv")
+    
 ##-------------##
 #shefire analysis
 ##-------------##
@@ -64,5 +69,6 @@ sra80_file_paths <- list.files(path = "data/fire/soil_temps", pattern = "\\.csv$
                             save.plots.tables=T,
                             save.directory="graphs/shefire")
   
-    
+  
+  #End ----
 
