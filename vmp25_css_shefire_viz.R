@@ -63,7 +63,7 @@ sra80_file_paths <- list.files(path = "data/fire/soil_temps", pattern = "\\.csv$
                             sensor.depths=c(5,10,15),
                             #cutoff=c(1500),
                             #regression="F",
-                            time.buffer=c(5),
+                            time.buffer=c(15),
                             print.plots.tables=T,
                             save.plots.tables=T,
                             save.directory="graphs/shefire/sra80/p2")
