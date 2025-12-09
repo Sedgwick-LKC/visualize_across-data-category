@@ -38,8 +38,7 @@ str(all_loggers)
 
 ##subset to one logger & fix date/time class
 single_logger <- filter(all_loggers, logger.number == 1) %>%
-  dplyr::mutate(date.time = as.POSIXct(date.time)) # %>%
-# tidyr::pivot_wider(names_from = port, values_from = temperature_deg.F)
+  dplyr::mutate(date.time = as.POSIXct(date.time, format = "%Y-%m-%d %H:%M:%S"))
 
 # Check structure (i.e., column classes)
 str(single_logger)
